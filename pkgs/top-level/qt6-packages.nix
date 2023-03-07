@@ -31,6 +31,8 @@ in
 
   inherit (kdeFrameworks) kcoreaddons;
 
+  qt6ct = callPackage ../tools/misc/qt6ct { };
+
   qtpbfimageplugin = callPackage ../development/libraries/qtpbfimageplugin { };
 
   quazip = callPackage ../development/libraries/quazip { };
