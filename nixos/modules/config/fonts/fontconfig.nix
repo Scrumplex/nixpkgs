@@ -400,7 +400,7 @@ in
         subpixel = {
 
           rgba = mkOption {
-            default = "rgb";
+            default = "none";
             type = types.enum ["rgb" "bgr" "vrgb" "vbgr" "none"];
             description = lib.mdDoc ''
               Subpixel order. The overwhelming majority of displays are
