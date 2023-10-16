@@ -10,14 +10,15 @@
 , gitUpdater
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "cowsql";
-  version = "0.15.2";
+  version = "1.15.3";
 
   src = fetchFromGitHub {
     owner = "cowsql";
     repo = "cowsql";
-    rev = "refs/tags/v${version}";
+    # this project seems to delete tags, use commit ref instead
+    rev = "a1d49d0d3e40b32ba655fffe14b7669c2aa1bcec"; # refs/tags/v1.15.3
     hash = "sha256-+za3pIcV4BhoImKvJlKatCK372wL4OyPbApQvGxGGGk=";
   };
 
