@@ -7,12 +7,15 @@ let
   inherit (lib) mkDefault mkEnableOption mkIf mkPackageOption;
 
   cfg = config.services.monado;
+
 in
 {
   options.services.monado = {
     enable = mkEnableOption "Monado wrapper and user service";
 
     package = mkPackageOption pkgs "monado" { };
+
+    defaultRuntime = mkEnableOption "Monado as the default OpenXR runtime on the system";
   };
 
   config = mkIf cfg.enable {
@@ -70,6 +73,10 @@ in
 
     environment.systemPackages = [ cfg.package ];
     environment.pathsToLink = [ "/share/openxr" ];
+
+    environment.etc."xdg/openxr/1/active_runtime.json" = mkIf cfg.defaultRuntime {
+      source = "${cfg.package}/share/openxr/1/openxr_monado.json";
+    };
   };
 
   meta.maintainers = with lib.maintainers; [ Scrumplex ];
