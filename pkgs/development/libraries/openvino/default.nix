@@ -5,7 +5,7 @@
 , cudaSupport ? opencv.cudaSupport or false
 
 # build
-, addOpenGLRunpath
+, addDriverRunpath
 , autoPatchelfHook
 , cmake
 , git
@@ -70,7 +70,7 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [
-    addOpenGLRunpath
+    addDriverRunpath
     autoPatchelfHook
     cmake
     git
@@ -156,7 +156,7 @@ stdenv.mkDerivation rec {
   postFixup = ''
     # Link to OpenCL
     find $out -type f \( -name '*.so' -or -name '*.so.*' \) | while read lib; do
-      addOpenGLRunpath "$lib"
+      addDriverRunpath "$lib"
     done
   '';
 

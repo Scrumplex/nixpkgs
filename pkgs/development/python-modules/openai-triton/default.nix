@@ -4,7 +4,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   fetchpatch,
-  addOpenGLRunpath,
+  addDriverRunpath,
   setuptools,
   pytestCheckHook,
   cmake,
@@ -93,7 +93,7 @@ buildPythonPackage rec {
       old = [ "-lcuda" ];
       new = [
         "-lcuda"
-        "-L${addOpenGLRunpath.driverLink}"
+        "-L${addDriverRunpath.driverLink}"
         "-L${cudaPackages.cuda_cudart}/lib/stubs/"
       ];
 
