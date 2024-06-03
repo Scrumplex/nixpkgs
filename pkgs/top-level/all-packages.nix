@@ -5499,7 +5499,9 @@ with pkgs;
   hypr = callPackage ../applications/window-managers/hyprwm/hypr {
     cairo = cairo.override { xcbSupport = true; };  };
 
-  hyprland = callPackage ../applications/window-managers/hyprwm/hyprland { };
+  hyprland = callPackage ../applications/window-managers/hyprwm/hyprland {
+    libliftoff = libliftoff_0_4;
+  };
 
   hyprland-autoname-workspaces = callPackage ../applications/misc/hyprland-autoname-workspaces { };
 
@@ -22325,8 +22327,8 @@ with pkgs;
 
   liblc3 = callPackage ../development/libraries/liblc3 { };
 
-  inherit (callPackages ../development/libraries/libliftoff { }) libliftoff_0_4;
-  libliftoff = libliftoff_0_4;
+  inherit (callPackages ../development/libraries/libliftoff { }) libliftoff_0_4 libliftoff_0_5;
+  libliftoff = libliftoff_0_5;
 
   liblqr1 = callPackage ../development/libraries/liblqr-1 {
     inherit (darwin.apple_sdk.frameworks) Carbon AppKit;
