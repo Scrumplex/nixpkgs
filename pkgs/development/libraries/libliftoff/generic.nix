@@ -1,0 +1,29 @@
+{ lib, stdenv
+, meson, pkg-config, ninja
+, libdrm
+, version
+, src
+}:
+
+stdenv.mkDerivation (finalAttrs: {
+  pname = "libliftoff";
+  inherit version src;
+
+  nativeBuildInputs = [ meson pkg-config ninja ];
+
+  buildInputs = [ libdrm ];
+
+  meta = with lib; {
+    description = "A lightweight KMS plane library";
+    longDescription = ''
+      libliftoff eases the use of KMS planes from userspace without standing in
+      your way. Users create "virtual planes" called layers, set KMS properties
+      on them, and libliftoff will pick planes for these layers if possible.
+    '';
+    inherit (src.meta) homepage;
+    changelog = "https://github.com/emersion/libliftoff/releases/tag/v${finalAttrs.version}";
+    license     = licenses.mit;
+    platforms   = platforms.linux;
+    maintainers = with maintainers; [ primeos Scrumplex ];
+  };
+})
