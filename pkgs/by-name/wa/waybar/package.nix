@@ -37,6 +37,7 @@
   scdoc,
   sndio,
   spdlog,
+  systemdMinimal,
   sway,
   udev,
   upower,
@@ -60,6 +61,7 @@
   rfkillSupport ? true,
   runTests ? stdenv.buildPlatform.canExecute stdenv.hostPlatform,
   sndioSupport ? true,
+  systemdSupport ? stdenv.hostPlatform.isLinux,
   swaySupport ? true,
   traySupport ? true,
   udevSupport ? true,
@@ -153,6 +155,7 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optional pulseSupport libpulseaudio
     ++ lib.optional sndioSupport sndio
     ++ lib.optional swaySupport sway
+    ++ lib.optional systemdSupport systemdMinimal
     ++ lib.optional traySupport libdbusmenu-gtk3
     ++ lib.optional udevSupport udev
     ++ lib.optional upowerSupport upower
@@ -179,7 +182,7 @@ stdenv.mkDerivation (finalAttrs: {
       "pulseaudio" = pulseSupport;
       "rfkill" = rfkillSupport;
       "sndio" = sndioSupport;
-      "systemd" = true;
+      "systemd" = systemdSupport;
       "tests" = runTests;
       "upower_glib" = upowerSupport;
       "wireplumber" = wireplumberSupport;
