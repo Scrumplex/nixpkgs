@@ -172,3 +172,34 @@ to the team without an approval by at least one existing member.
 Various utility scripts, which are mainly useful for nixpkgs maintainers,
 are available under `./scripts/`.  See its [README](./scripts/README.md)
 for further information.
+
+# Guidelines for Committers
+
+When merging changes, care must be taken to reduce impact to the `master`
+branch. If a commit breaks evaluation in `master` it could make it into new PR
+branches and cause further breakage.
+
+One approach to avoid merging such problematic changes is to wait for successful Borg evaluation.
+
+## Breaking changes
+
+In general breaking changes to `master` and `staging` branches are permitted.
+Though restrictions might apply towards the end of a NixOS release cycle. This
+is to avoid large-scale breakages shortly before or during a Zero Hydra
+Failures (ZHF) campaign. These restrictions also intend to decrease the
+likelihood of a delayed NixOS release.
+
+These are some example changes and if they are considered a breaking change
+during a freeze period:
+
+- `foo: 1.2.3 -> 1.2.4` - Assuming this package follows semantic versioning and
+  none of its dependent packages fail to build because of this change, it can be
+  safely merged.
+- `unmaintained-software: drop` - If this PR removes a leaf package or the
+  removal doesn't otherwise break other packages, it can be merged.
+- `cool-tool: rename from fancy-tool` - As long as this PR replaces all
+  references to the old attribute name with the new name, it can be merged.
+- `libpopular: 4.3.2 -> 5.0.0` - If this PR would trigger many rebuilds and/or
+  target `staging`, it should probably be delayed until after the freeze-period
+  is over. If such a package bump has a very high priority, it should be brought
+  up to release managers
