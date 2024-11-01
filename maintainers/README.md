@@ -181,40 +181,45 @@ in other pull requests and block Hydra CI, thus introducing chaos to our
 workflow.
 
 One approach to avoid merging such problematic changes is to wait for
-successful Ofborg evaluation. Additionally, using tools like `nixpkgs-review`
-can help spot issues early, before Ofborg finishes evaluation.
+successful Ofborg evaluation. Additionally, using tools like
+[nixpkgs-review](https://github.com/Mic92/nixpkgs-review) can help spot issues
+early, before Ofborg finishes evaluation.
 
 ## Breaking changes
 
-In general breaking changes to `master` and `staging` branches are permitted.
-Though restrictions might apply towards the end of a NixOS release cycle, due
-to our feature freeze mechanism. This is to avoid large-scale breakages shortly
-before and during a Zero Hydra Failures (ZHF) campaign. These restrictions also
-intend to decrease the likelihood of a delayed NixOS release. The feature
-freeze period is documented in the announcement of each release schedule.
+In general breaking changes to `master` and `staging` branches are permitted,
+as long as they are documented in the release notes. Though restrictions might
+apply towards the end of a NixOS release cycle, due to our feature freeze
+mechanism. This is to avoid large-scale breakages shortly before and during
+a Zero Hydra Failures (ZHF) campaign. These restrictions also intend to
+decrease the likelihood of a delayed NixOS release. The feature freeze period
+is documented in the announcement of each release schedule.
 
-These are some example changes and if they are considered a breaking change
-during a freeze period:
-
-- `foo: 1.2.3 -> 1.2.4` - Assuming this package follows semantic versioning and
-  none of its dependent packages fail to build because of this change, it can be
-  safely merged. Otherwise, if it can be confirmed that there is no major change
-  in its functionality or API, but only adding new features or fixing bugs, it
-  can also be merged.
-- `unmaintained-software: drop` - If this PR removes a leaf package or the
-  removal doesn't otherwise break other packages, it can be merged.
-- `cool-tool: rename from fancy-tool` - As long as this PR replaces all
-  references to the old attribute name with the new name and adds an alias, it
-  can be merged.
-- `libpopular: 4.3.2 -> 5.0.0` - If this PR would trigger many rebuilds and/or
-  target `staging`, it should probably be delayed until after the freeze-period
-  is over. Alternatively, if this PR is for a popular package and doesn't cause
-  many rebuilds, it should also be delayed to reduce risk of breakage. If a PR
-  includes important changes, such as security fixes, it should be brought up to
-  release managers.
-- `nixos/transmission: refactor` - If this PR adjusts the type, default value
-  or effect of options in the NixOS module, so that users must rewrite their
-  configuration to keep the current behavior unchanged, it should not be merged,
-  as we don't have enough time to collect user feedback and avoid possible
-  breakage. However, it should be accepted if the current behavior is
-  considered broken and is fixed by the PR.
+> These are some example changes and if they are considered a breaking change
+> during a freeze period:
+>
+> - `foo: 1.2.3 -> 1.2.4` - Assuming this package follows semantic versioning
+>   and none of its dependent packages fail to build because of this change, it
+>   can be safely merged. Otherwise, if it can be confirmed that there is no
+>   major change in its functionality or API, but only adding new features or
+>   fixing bugs, it
+>   can also be merged.
+> - `unmaintained-software: drop` - If this PR removes a leaf package or the
+>   removal doesn't otherwise break other packages, it can be merged.
+> - `cool-tool: rename from fancy-tool` - As long as this PR replaces all
+>   references to the old attribute name with the new name and adds an alias,
+>   it can be merged.
+> - `libpopular: 4.3.2 -> 5.0.0` - If this PR would trigger many rebuilds
+>   and/or target `staging`, it should probably be delayed until after the
+>   freeze-period is over. Alternatively, if this PR is for a popular package
+>   and doesn't cause many rebuilds, it should also be delayed to reduce risk
+>   of breakage. If a PR includes important changes, such as security fixes, it
+>   should be brought up to
+>   release managers.
+> - `nixos/transmission: refactor` - If this PR adjusts the type, default value
+>   or effect of options in the NixOS module, so that users must rewrite their
+>   configuration to keep the current behavior unchanged, it should not be
+>   merged, as we don't have enough time to collect user feedback and avoid
+>   possible breakage. However, it should be accepted if the current behavior
+>   is
+>   considered broken and is fixed by the PR.
