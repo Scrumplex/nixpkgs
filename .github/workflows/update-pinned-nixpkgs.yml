@@ -35,7 +35,6 @@ jobs:
           # Prepare a branch
           branch_name="ci/update-pinned-nixpkgs"
           git switch --force-create "$branch_name" master
-          git branch --set-upstream-to "origin/$branch_name"
 
           # Run script
           ci/update-pinned-nixpkgs.sh
@@ -44,5 +43,5 @@ jobs:
           git commit -m "ci: Update pinned Nixpkgs"
 
           # Create PR
-          git push --force origin "$branch_name"
+          git push --set-upstream "origin/$branch_name" --force origin "$branch_name"
           gh pr create --fill
