@@ -15,7 +15,7 @@
   pkg-config,
   rustPlatform,
   stdenv,
-  wrapGAppsHook,
+  wrapGAppsHook4,
   webkitgtk_4_1,
 }:
 let
@@ -61,7 +61,7 @@ rustPlatform.buildRustPackage {
     dotnetSdk
     nodejs
     npmHooks.npmConfigHook
-    wrapGAppsHook
+    wrapGAppsHook4
     pkg-config
   ];
 
