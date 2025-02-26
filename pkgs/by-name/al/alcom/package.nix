@@ -15,7 +15,7 @@
   pkg-config,
   rustPlatform,
   stdenv,
-  wrapGAppsHook
+  wrapGAppsHook,
   webkitgtk_4_1,
 }:
 let
