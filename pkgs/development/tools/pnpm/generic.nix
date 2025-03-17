@@ -11,8 +11,11 @@
   hash,
 }:
 
+let
+  majorVersion = lib.versions.major version;
+in
 stdenvNoCC.mkDerivation (finalAttrs: {
-  pname = "pnpm";
+  pname = "pnpm_${majorVersion}";
   inherit version;
 
   src = fetchurl {
