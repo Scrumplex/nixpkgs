@@ -1,6 +1,7 @@
 {
   lib,
   stdenvNoCC,
+  writeScript,
   callPackages,
   fetchurl,
   installShellFiles,
@@ -78,6 +79,27 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       tests.version = lib.optionalAttrs withNode (
         testers.testVersion { package = finalAttrs.finalPackage; }
       );
+      updateScript = writeScript "pnpm-update-script" ''
+        #!/usr/bin/env nix-shell
+        #!nix-shell --pure -i bash --keep GITHUB_TOKEN -p cacert curl jq common-updater-scripts
+        set -eou pipefail
+
+        curl_github() {
+            curl -L ''${GITHUB_TOKEN:+" -u \":$GITHUB_TOKEN\""} "$@"
+        }
+
+        latestTag=$(curl_github https://api.github.com/repos/pnpm/pnpm/releases?per_page=100 | jq -r --arg major "v${majorVersion}" '[.[].tag_name | select(startswith($major))][0]')
+
+        # Exit if there is no tag with this major version
+        if [ "$latestTag" = "null" ]; then
+          echo "No releases starting with v${majorVersion}"
+          exit 0
+        fi
+
+        latestVersion="''${latestTag#v}"
+
+        update-source-version ${finalAttrs.pname} "$latestVersion" --file=./pkgs/development/tools/pnpm/default.nix
+      '';
     };
 
   meta = {
