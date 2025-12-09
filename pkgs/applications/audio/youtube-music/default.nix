@@ -7,7 +7,8 @@
   python3,
   copyDesktopItems,
   nodejs,
-  pnpm,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   makeDesktopItem,
   nix-update-script,
 }:
@@ -28,7 +29,7 @@ stdenv.mkDerivation (finalAttrs: {
     ./fix-mpris-desktop-entry.patch
   ];
 
-  pnpmDeps = pnpm.fetchDeps {
+  pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
     fetcherVersion = 2;
     hash = "sha256-xZQ8rnLGD0ZxxUUPLHmNJ6mA+lnUHCTBvtJTiIPxaZU=";
@@ -38,7 +39,7 @@ stdenv.mkDerivation (finalAttrs: {
     makeWrapper
     python3
     nodejs
-    pnpm.configHook
+    pnpmConfigHook
   ]
   ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ copyDesktopItems ];
 

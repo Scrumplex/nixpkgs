@@ -61,7 +61,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildPhase = ''
     runHook preBuild
 
-    # pnpm.fetchDeps doesn't run build scripts, so we need to run postinstall for this package otherwise the frontend
+    # fetchPnpmDeps doesn't run build scripts, so we need to run postinstall for this package otherwise the frontend
     # build fails
     pushd node_modules/.pnpm/node_modules/v-code-diff
     pnpm postinstall

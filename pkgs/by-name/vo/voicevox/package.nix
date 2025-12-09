@@ -11,16 +11,14 @@
   makeWrapper,
   moreutils,
   nodejs,
-  pnpm_10,
+  fetchPnpmDeps,
+  pnpmConfigHook,
 
   _7zz,
   electron,
   voicevox-engine,
 }:
 
-let
-  pnpm = pnpm_10;
-in
 stdenv.mkDerivation (finalAttrs: {
   pname = "voicevox";
   version = "0.25.0";
@@ -46,7 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
     jq "del(.packageManager) | .version = \"$version\"" package.json | sponge package.json
   '';
 
-  pnpmDeps = pnpm.fetchDeps {
+  pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs)
       pname
       version
@@ -72,7 +70,7 @@ stdenv.mkDerivation (finalAttrs: {
     makeWrapper
     moreutils
     nodejs
-    pnpm.configHook
+    pnpmConfigHook
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     copyDesktopItems
