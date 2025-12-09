@@ -4,9 +4,13 @@
   fetchFromGitHub,
   nixosTests,
   pnpm_9,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   nix-update-script,
 }:
-
+let
+  pnpm = pnpm_9;
+in
 buildNpmPackage rec {
   pname = "flood";
   version = "4.11.0";
@@ -18,11 +22,11 @@ buildNpmPackage rec {
     hash = "sha256-RBWDEFhLEZdC7luGFGx3qY0Hk7nM44RZgRyCWXFPh1k=";
   };
 
-  npmConfigHook = pnpm_9.configHook;
+  npmConfigHook = (pnpmConfigHook.override { inherit pnpm; });
   npmDeps = pnpmDeps;
   dontNpmPrune = true;
-  pnpmDeps = pnpm_9.fetchDeps {
-    inherit pname version src;
+  pnpmDeps = fetchPnpmDeps {
+    inherit pname version src pnpm;
     fetcherVersion = 1;
     hash = "sha256-MnsUTXcLMT0Q2bQ/rRD4FfJx8XP9TLiv1oTHIgnMZCQ=";
   };

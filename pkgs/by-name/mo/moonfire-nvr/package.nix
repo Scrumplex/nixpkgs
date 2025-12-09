@@ -10,6 +10,8 @@
   moonfire-nvr,
   nodejs,
   pnpm_9,
+  fetchPnpmDeps,
+  pnpmConfigHook,
 }:
 
 let
@@ -21,16 +23,18 @@ let
     tag = "v${version}";
     hash = "sha256-0EaGqZUmYGxLHcJAhlbG2wZMDiVv8U1bcTQqMx0aTo0=";
   };
+  pnpm = pnpm_9;
   ui = stdenv.mkDerivation (finalAttrs: {
     inherit version src;
     pname = "${pname}-ui";
     sourceRoot = "${src.name}/ui";
     nativeBuildInputs = [
       nodejs
-      pnpm_9.configHook
+      (pnpmConfigHook.override { inherit pnpm; })
     ];
-    pnpmDeps = pnpm_9.fetchDeps {
+    pnpmDeps = fetchPnpmDeps {
       inherit (finalAttrs) pname version src;
+      inherit pnpm;
       sourceRoot = "${finalAttrs.src.name}/ui";
       fetcherVersion = 1;
       hash = "sha256-7fMhUFlV5lz+A9VG8IdWoc49C2CTdLYQlEgBSBqJvtw=";

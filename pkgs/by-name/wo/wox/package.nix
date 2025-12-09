@@ -6,6 +6,8 @@
   keybinder3,
   nodejs,
   pnpm_9,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   python3Packages,
   writableTmpDirAsHomeHook,
   buildGoModule,
@@ -30,6 +32,8 @@ let
     tag = "v${version}";
     hash = "sha256-ZuKsIWooLqGeEex8uRiMVYVxnAJyiQt0soZ9OP6+qq0=";
   };
+
+  pnpm = pnpm_9;
 
   metaCommon = {
     description = "Cross-platform launcher that simply works";
@@ -64,16 +68,17 @@ let
 
     nativeBuildInputs = [
       nodejs
-      pnpm_9.configHook
+      (pnpmConfigHook.override { inherit pnpm; })
     ];
 
-    pnpmDeps = pnpm_9.fetchDeps {
+    pnpmDeps = fetchPnpmDeps {
       inherit (finalAttrs)
         pname
         version
         src
         sourceRoot
         ;
+      inherit pnpm;
       fetcherVersion = 2;
       hash = "sha256-HhdMwVNt7178EQlZGpTiTySBp8GR9tBpUaikEWt1BGY=";
     };

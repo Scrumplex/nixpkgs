@@ -14,6 +14,8 @@
   openssl,
   pkg-config,
   pnpm_9,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   replaceVars,
   runCommand,
   rustPlatform,
@@ -72,8 +74,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
     data = ./deps.json;
   };
 
-  pnpmDeps = pnpm.fetchDeps {
+  pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
+    inherit pnpm;
     fetcherVersion = 1;
     hash = "sha256-1tDegt8OgG0ZhvNGpkYQR+PuX/xI287OFk4MGAXUKZQ=";
   };
@@ -85,7 +88,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     gradle
     nodejs
     pkg-config
-    pnpm.configHook
+    (pnpmConfigHook.override { inherit pnpm; })
   ]
   ++ lib.optional stdenv.hostPlatform.isDarwin makeBinaryWrapper;
 

@@ -5,7 +5,8 @@
   fetchFromGitHub,
   electron_38,
   dart-sass,
-  pnpm_10,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   darwin,
   copyDesktopItems,
   makeDesktopItem,
@@ -22,17 +23,16 @@ let
   };
 
   electron = electron_38;
-  pnpm = pnpm_10;
 in
 buildNpmPackage {
   inherit pname version;
 
   inherit src;
 
-  npmConfigHook = pnpm.configHook;
+  npmConfigHook = pnpmConfigHook;
 
   npmDeps = null;
-  pnpmDeps = pnpm.fetchDeps {
+  pnpmDeps = fetchPnpmDeps {
     inherit
       pname
       version

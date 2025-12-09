@@ -5,10 +5,14 @@
   makeBinaryWrapper,
   nodejs,
   pnpm_9,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   testers,
   shadcn,
 }:
-
+let
+  pnpm = pnpm_9;
+in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "shadcn";
   version = "2.0.3";
@@ -21,7 +25,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   };
 
   pnpmWorkspaces = [ "shadcn" ];
-  pnpmDeps = pnpm_9.fetchDeps {
+  pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs)
       pname
       version
@@ -35,7 +39,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     makeBinaryWrapper
     nodejs
-    pnpm_9.configHook
+    (pnpmConfigHook.override { inherit pnpm; })
   ];
 
   buildPhase = ''

@@ -29,7 +29,8 @@
   poppler-utils,
   pytest-playwright,
   playwright-driver,
-  pnpm,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   nodejs,
   markdown,
   nh3,
@@ -60,7 +61,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     nodejs
-    pnpm.configHook
+    pnpmConfigHook
   ];
 
   dependencies = [
@@ -92,7 +93,7 @@ buildPythonPackage rec {
     #annotate = [ fcdocs-annotate ];
   };
 
-  pnpmDeps = pnpm.fetchDeps {
+  pnpmDeps = fetchPnpmDeps {
     inherit pname version src;
     fetcherVersion = 1;
     hash = "sha256-kvLV/pCX/wQHG0ttrjSro7/CoQ5K1T0aFChafQOwvNw=";
