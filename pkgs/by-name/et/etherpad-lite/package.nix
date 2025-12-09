@@ -4,13 +4,12 @@
   fetchFromGitHub,
   nix-update-script,
   pnpm_9,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   makeWrapper,
   nodejs,
 }:
 
-let
-  pnpm = pnpm_9;
-in
 stdenv.mkDerivation (finalAttrs: {
   pname = "etherpad-lite";
   version = "2.5.1";
@@ -29,14 +28,16 @@ stdenv.mkDerivation (finalAttrs: {
     ./dont-fail-on-plugins-json.patch
   ];
 
-  pnpmDeps = pnpm.fetchDeps {
+  pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
+    pnpm = pnpm_9;
     fetcherVersion = 1;
     hash = "sha256-gajm1yXQPZZ/oB27HwgTEoKLzwMKsHDoo2w+mIOnJrc=";
   };
 
   nativeBuildInputs = [
-    pnpm.configHook
+    pnpmConfigHook
+    pnpm_9
     makeWrapper
   ];
 
