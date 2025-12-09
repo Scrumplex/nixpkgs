@@ -2,7 +2,8 @@
   buildGoModule,
   lib,
   fetchFromGitHub,
-  pnpm,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   nodejs,
   fetchpatch,
   stdenv,
@@ -25,7 +26,7 @@ buildGoModule rec {
 
     sourceRoot = "${src.name}/ui";
 
-    pnpmDeps = pnpm.fetchDeps {
+    pnpmDeps = fetchPnpmDeps {
       inherit src version pname;
       sourceRoot = "${src.name}/ui";
       fetcherVersion = 1;
@@ -33,7 +34,7 @@ buildGoModule rec {
     };
 
     nativeBuildInputs = [
-      pnpm.configHook
+      pnpmConfigHook
       nodejs
     ];
 

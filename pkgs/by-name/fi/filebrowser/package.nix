@@ -25,10 +25,10 @@ let
 
     sourceRoot = "${src.name}/frontend";
 
-    npmConfigHook = pnpm.configHook;
+    npmConfigHook = pnpmConfigHook;
     npmDeps = pnpmDeps;
 
-    pnpmDeps = pnpm.fetchDeps {
+    pnpmDeps = fetchPnpmDeps {
       inherit
         pname
         version

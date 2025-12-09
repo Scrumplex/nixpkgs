@@ -6,7 +6,8 @@
   makeWrapper,
   nixosTests,
   nodejs,
-  pnpm_10,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   prisma,
   prisma-engines,
   openssl,
@@ -18,7 +19,6 @@
 }:
 let
   sources = lib.importJSON ./sources.json;
-  pnpm = pnpm_10;
 
   geocities = stdenvNoCC.mkDerivation {
     pname = "umami-geocities";
@@ -77,7 +77,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     makeWrapper
     nodejs
-    pnpm.configHook
+    pnpmConfigHook
   ];
 
   src = fetchFromGitHub {
@@ -90,7 +90,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   # install dev dependencies as well, for rollup
   pnpmInstallFlags = [ "--prod=false" ];
 
-  pnpmDeps = pnpm.fetchDeps {
+  pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs)
       pname
       pnpmInstallFlags

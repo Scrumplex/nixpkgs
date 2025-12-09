@@ -72,7 +72,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     data = ./deps.json;
   };
 
-  pnpmDeps = pnpm.fetchDeps {
+  pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
     fetcherVersion = 1;
     hash = "sha256-1tDegt8OgG0ZhvNGpkYQR+PuX/xI287OFk4MGAXUKZQ=";
@@ -85,7 +85,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     gradle
     nodejs
     pkg-config
-    pnpm.configHook
+    pnpmConfigHook
   ]
   ++ lib.optional stdenv.hostPlatform.isDarwin makeBinaryWrapper;
 
