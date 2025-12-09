@@ -29,14 +29,14 @@ stdenv.mkDerivation (finalAttrs: {
     ./dont-fail-on-plugins-json.patch
   ];
 
-  pnpmDeps = pnpm.fetchDeps {
+  pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
     fetcherVersion = 1;
     hash = "sha256-gajm1yXQPZZ/oB27HwgTEoKLzwMKsHDoo2w+mIOnJrc=";
   };
 
   nativeBuildInputs = [
-    pnpm.configHook
+    pnpmConfigHook
     makeWrapper
   ];
 
