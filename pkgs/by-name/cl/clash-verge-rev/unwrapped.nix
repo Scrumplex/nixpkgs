@@ -16,6 +16,8 @@
   nodejs,
   pkg-config,
   pnpm_9,
+  fetchPnpmDeps,
+  pnpmConfigHook,
 
   glib,
   kdePackages,
@@ -25,7 +27,9 @@
   openssl,
   webkitgtk_4_1,
 }:
-
+let
+  pnpm = pnpm_9;
+in
 rustPlatform.buildRustPackage {
   inherit version src meta;
   pname = "${pname}-unwrapped";
@@ -35,8 +39,8 @@ rustPlatform.buildRustPackage {
 
   cargoHash = vendor-hash;
 
-  pnpmDeps = pnpm_9.fetchDeps {
-    inherit pname version src;
+  pnpmDeps = fetchPnpmDeps {
+    inherit pname version src pnpm;
     fetcherVersion = 1;
     hash = pnpm-hash;
   };
@@ -94,7 +98,7 @@ rustPlatform.buildRustPackage {
     moreutils
     nodejs
     pkg-config
-    pnpm_9.configHook
+    (pnpmConfigHook.override { inherit pnpm; })
   ];
 
   buildInputs = [

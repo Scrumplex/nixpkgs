@@ -4,6 +4,8 @@
   fetchFromGitHub,
   nix-update-script,
   pnpm_9,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   makeWrapper,
   nodejs,
 }:
@@ -29,14 +31,15 @@ stdenv.mkDerivation (finalAttrs: {
     ./dont-fail-on-plugins-json.patch
   ];
 
-  pnpmDeps = pnpm.fetchDeps {
+  pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
+    inherit pnpm;
     fetcherVersion = 1;
     hash = "sha256-gajm1yXQPZZ/oB27HwgTEoKLzwMKsHDoo2w+mIOnJrc=";
   };
 
   nativeBuildInputs = [
-    pnpm.configHook
+    (pnpmConfigHook.override { inherit pnpm; })
     makeWrapper
   ];
 

@@ -5,6 +5,8 @@
   makeWrapper,
   nodejs-slim,
   pnpm_9,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   versionCheckHook,
   runCommand,
   textlint,
@@ -25,7 +27,9 @@
   textlint-rule-unexpanded-acronym,
   textlint-rule-write-good,
 }:
-
+let
+  pnpm = pnpm_9;
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "textlint";
   version = "15.2.1";
@@ -49,13 +53,14 @@ stdenv.mkDerivation (finalAttrs: {
     ./remove-overrides.patch
   ];
 
-  pnpmDeps = pnpm_9.fetchDeps {
+  pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs)
       pname
       version
       src
       patches
       ;
+    inherit pnpm;
     fetcherVersion = 1;
     hash = "sha256-TyKtH4HjCDTydVd/poG05Yh5nRSfcrSPzFLEE3Oq2uo=";
   };
@@ -63,7 +68,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     makeWrapper
     nodejs-slim
-    pnpm_9.configHook
+    (pnpmConfigHook.override { inherit pnpm; })
   ];
 
   buildPhase = ''

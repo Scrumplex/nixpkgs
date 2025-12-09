@@ -5,10 +5,14 @@
   lib,
   nodejs,
   pnpm_9,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   stdenv,
 }:
 let
   version = "0.25.0";
+
+  pnpm = pnpm_9;
 
   parca-src = fetchFromGitHub {
     owner = "parca-dev";
@@ -24,6 +28,7 @@ let
 
     pnpmDeps = pnpm_9.fetchDeps {
       inherit (finalAttrs) pname src version;
+      inherit pnpm;
       fetcherVersion = 1;
       hash = "sha256-3egNSL62TyuRg6JDMMptjT0vLlwYdDLnJC2rYzaPE1w=";
     };
@@ -31,7 +36,7 @@ let
     nativeBuildInputs = [
       faketty
       nodejs
-      pnpm_9.configHook
+      (pnpmConfigHook.override { inherit pnpm; })
     ];
 
     # faketty is required to work around a bug in nx.

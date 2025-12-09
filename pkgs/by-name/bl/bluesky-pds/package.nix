@@ -5,6 +5,8 @@
   srcOnly,
   python3,
   pnpm_9,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   fetchFromGitHub,
   nodejs,
   vips,
@@ -18,6 +20,7 @@
 let
   nodeSources = srcOnly nodejs;
   pythonEnv = python3.withPackages (p: [ p.setuptools ]);
+  pnpm = pnpm_9;
 in
 
 stdenv.mkDerivation (finalAttrs: {
@@ -38,7 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
     nodejs
     pythonEnv
     pkg-config
-    pnpm_9.configHook
+    (pnpmConfigHook.override { inherit pnpm; })
     removeReferencesTo
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
@@ -48,13 +51,14 @@ stdenv.mkDerivation (finalAttrs: {
   # Required for `sharp` NPM dependency
   buildInputs = [ vips ];
 
-  pnpmDeps = pnpm_9.fetchDeps {
+  pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs)
       pname
       version
       src
       sourceRoot
       ;
+    inherit pnpm;
     fetcherVersion = 2;
     hash = "sha256-4qKWkINpUHzatiMa7ZNYp1NauU2641W0jHDjmRL9ipI=";
   };

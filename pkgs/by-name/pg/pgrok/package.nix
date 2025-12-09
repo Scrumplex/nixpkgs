@@ -5,6 +5,8 @@
   nix-update-script,
   nodejs,
   pnpm_9,
+  fetchPnpmDeps,
+  pnpmConfigHook,
 }:
 
 let
@@ -16,6 +18,8 @@ let
     tag = "v${version}";
     hash = "sha256-Meavhgq0xHRAfCgzdazC1wu8aDw39qQCZrVtZUScwgs=";
   };
+
+  pnpm = pnpm_9;
 in
 
 buildGoModule {
@@ -28,11 +32,11 @@ buildGoModule {
 
   nativeBuildInputs = [
     nodejs
-    pnpm_9.configHook
+    (pnpmConfigHook.override { inherit pnpm; })
   ];
 
-  env.pnpmDeps = pnpm_9.fetchDeps {
-    inherit pname version src;
+  env.pnpmDeps = fetchPnpmDeps {
+    inherit pname version src pnpm;
     fetcherVersion = 1;
     hash = "sha256-o6wxO8EGRmhcYggJnfxDkH+nbt+isc8bfHji8Hu9YKg=";
   };

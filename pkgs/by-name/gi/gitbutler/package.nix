@@ -17,7 +17,8 @@
   nodejs,
   openssl,
   pkg-config,
-  pnpm_10,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   rust,
   rustPlatform,
   turbo,
@@ -27,7 +28,6 @@
 }:
 
 let
-  pnpm = pnpm_10;
   excludeSpec = spec: [
     "--exclude"
     spec
@@ -65,7 +65,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoHash = "sha256-H8YR+euwMGiGckURAWJIE9fOcu/ddJ6ENcnA1gHD9B8=";
 
-  pnpmDeps = pnpm.fetchDeps {
+  pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
     fetcherVersion = 2;
     hash = "sha256-I55RNWP6csT08SBIFEyUp9JTC5EzQXjKIPPSxkSpg7Y=";
@@ -80,7 +80,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     moreutils
     nodejs
     pkg-config
-    pnpm.configHook
+    pnpmConfigHook
     turbo
     wrapGAppsHook4
     yq # For `tomlq`

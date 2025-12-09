@@ -4,12 +4,15 @@
   libsass,
   nodejs,
   pnpm_9,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   fetchFromGitHub,
   nixosTests,
   vips,
 }:
 
 let
+  pnpm = pnpm_9;
   pinData = lib.importJSON ./pin.json;
 in
 
@@ -28,7 +31,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     nodejs
-    pnpm_9.configHook
+    (pnpmConfigHook.override { inherit pnpm; })
   ];
 
   buildInputs = [
@@ -37,8 +40,9 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   ];
 
   extraBuildInputs = [ libsass ];
-  pnpmDeps = pnpm_9.fetchDeps {
+  pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
+    inherit pnpm;
     fetcherVersion = 1;
     hash = pinData.uiPNPMDepsHash;
   };
