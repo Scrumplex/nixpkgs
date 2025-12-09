@@ -9,13 +9,17 @@
   nodejs,
   pkg-config,
   pnpm_9,
+  fetchPnpmDeps,
+  pnpmConfigHook,
 
   libayatana-appindicator,
   libsoup_3,
   openssl,
   webkitgtk_4_1,
 }:
-
+let
+  pnpm = pnpm_9;
+in
 rustPlatform.buildRustPackage rec {
   pname = "overlayed";
   version = "0.6.2";
@@ -32,7 +36,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-6wN4nZQWrY0J5E+auj17B3iJ/84hzBXYA/bJsX/N5pk=";
 
-  pnpmDeps = pnpm_9.fetchDeps {
+  pnpmDeps = fetchPnpmDeps {
     inherit pname version src;
     fetcherVersion = 1;
     hash = "sha256-+yyxoodcDfqJ2pkosd6sMk77/71RDsGthedo1Oigwto=";
@@ -44,7 +48,7 @@ rustPlatform.buildRustPackage rec {
     moreutils
     nodejs
     pkg-config
-    pnpm_9.configHook
+    (pnpmConfigHook.override { inherit pnpm; })
   ];
 
   buildInputs = [

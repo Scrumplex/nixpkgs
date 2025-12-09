@@ -4,7 +4,12 @@
   fetchFromGitHub,
   nodejs,
   pnpm_8,
+  fetchPnpmDeps,
+  pnpmConfigHook,
 }:
+let
+  pnpm = pnpm_8;
+in
 stdenv.mkDerivation rec {
   pname = "it-tools";
   version = "2024.10.22-7ca5933";
@@ -18,11 +23,16 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     nodejs
-    pnpm_8.configHook
+    (pnpmConfigHook.override { inherit pnpm; })
   ];
 
-  pnpmDeps = pnpm_8.fetchDeps {
-    inherit pname version src;
+  pnpmDeps = fetchPnpmDeps {
+    inherit
+      pname
+      version
+      src
+      pnpm
+      ;
     fetcherVersion = 1;
     hash = "sha256-m1eXBE5rakcq8NGnPC9clAAvNJQrN5RuSQ94zfgGZxw=";
   };

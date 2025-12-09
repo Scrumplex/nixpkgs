@@ -3,7 +3,9 @@
   fetchFromGitHub,
   stdenv,
   nodejs,
-  pnpm,
+  pnpm_9,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   buildGoModule,
   mage,
   writeShellScriptBin,
@@ -11,6 +13,8 @@
 }:
 
 let
+  pnpm = pnpm_9;
+
   version = "0.24.6";
   src = fetchFromGitHub {
     owner = "go-vikunja";
@@ -28,7 +32,7 @@ let
     ];
     sourceRoot = "${finalAttrs.src.name}/frontend";
 
-    pnpmDeps = pnpm.fetchDeps {
+    pnpmDeps = fetchPnpmDeps {
       inherit (finalAttrs)
         pname
         version
@@ -36,13 +40,14 @@ let
         src
         sourceRoot
         ;
+      inherit pnpm;
       fetcherVersion = 1;
       hash = "sha256-94ZlywOZYmW/NsvE0dtEA81MeBWGUrJsBXTUauuOmZM=";
     };
 
     nativeBuildInputs = [
       nodejs
-      pnpm.configHook
+      (pnpmConfigHook.override { inherit pnpm; })
     ];
 
     doCheck = true;

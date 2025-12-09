@@ -11,6 +11,8 @@
   openssl,
   pkg-config,
   pnpm_10,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   rustc,
   stdenv,
   xdg-utils,
@@ -41,6 +43,8 @@ let
   };
   pname = "teleport";
   inherit version;
+
+  pnpm = pnpm_10;
 
   rdpClient = rustPlatform.buildRustPackage (finalAttrs: {
     pname = "teleport-rdpclient";
@@ -73,8 +77,13 @@ let
       hash = cargoHash;
     };
 
-    pnpmDeps = pnpm_10.fetchDeps {
-      inherit src pname version;
+    pnpmDeps = fetchPnpmDeps {
+      inherit
+        src
+        pname
+        version
+        pnpm
+        ;
       fetcherVersion = 2;
       hash = pnpmHash;
     };
@@ -83,7 +92,7 @@ let
       binaryen
       cargo
       nodejs
-      pnpm_10.configHook
+      (pnpmConfigHook.override { inherit pnpm; })
       rustc
       rustc.llvmPackages.lld
       rustPlatform.cargoSetupHook

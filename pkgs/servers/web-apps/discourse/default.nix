@@ -40,6 +40,8 @@
   rustc,
   cargo,
   pnpm_9,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   svgo,
   nodejs,
   jq,
@@ -60,6 +62,7 @@ let
     sha256 = "sha256-8Uzb0cjC3PUrh6Nlu6OJ09GKD+8KZq/IUba2NXLm1JI=";
   };
 
+  pnpm = pnpm_9;
   ruby = ruby_3_3;
 
   runtimeDeps = [
@@ -299,9 +302,9 @@ let
     pname = "discourse-assets";
     inherit version src;
 
-    pnpmDeps = pnpm_9.fetchDeps {
+    pnpmDeps = fetchPnpmDeps {
       pname = "discourse-assets";
-      inherit version src;
+      inherit version src pnpm;
       fetcherVersion = 1;
       hash = "sha256-npRKX5Lr2QrPD8OFBysDl30exP+FTnjMxFeR/Gv0Z0I=";
     };
@@ -316,7 +319,7 @@ let
       jq
       moreutils
       nodejs
-      pnpm_9.configHook
+      (pnpmConfigHook.override { inherit pnpm; })
     ];
 
     outputs = [

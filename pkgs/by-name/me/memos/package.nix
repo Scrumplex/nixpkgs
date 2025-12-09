@@ -5,7 +5,8 @@
   nix-update-script,
   nodejs,
   lib,
-  pnpm,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   buf,
   cacert,
   grpc-gateway,
@@ -58,7 +59,7 @@ let
   memos-web = stdenvNoCC.mkDerivation (finalAttrs: {
     pname = "memos-web";
     inherit version src;
-    pnpmDeps = pnpm.fetchDeps {
+    pnpmDeps = fetchPnpmDeps {
       inherit (finalAttrs) pname version src;
       sourceRoot = "${finalAttrs.src.name}/web";
       fetcherVersion = 1;
@@ -67,7 +68,7 @@ let
     pnpmRoot = "web";
     nativeBuildInputs = [
       nodejs
-      pnpm.configHook
+      pnpmConfigHook
     ];
     preBuild = ''
       cp -r {${memos-protobuf-gen},.}/web/src/types/proto

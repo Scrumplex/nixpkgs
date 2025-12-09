@@ -5,6 +5,8 @@
   cargo-tauri,
   nodejs,
   pnpm_9,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   pkg-config,
   glib-networking,
   openssl,
@@ -15,6 +17,9 @@
   gtk3,
   nix-update-script,
 }:
+let
+  pnpm = pnpm_9;
+in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "quantframe";
   version = "1.5.9";
@@ -36,8 +41,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   patches = [ ./0001-disable-telemetry.patch ];
 
-  pnpmDeps = pnpm_9.fetchDeps {
+  pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
+    inherit pnpm;
     fetcherVersion = 1;
     hash = "sha256-ncoxliXnLxWEXL1Z7ixOULI/uYkxmfLiDWu1tDSRsrM=";
   };
@@ -49,7 +55,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     pkg-config
     wrapGAppsHook3
     nodejs
-    pnpm_9.configHook
+    (pnpmConfigHook.override { inherit pnpm; })
   ];
 
   buildInputs = [

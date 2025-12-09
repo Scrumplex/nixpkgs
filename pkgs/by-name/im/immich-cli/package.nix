@@ -6,6 +6,7 @@
   makeWrapper,
   stdenv,
   versionCheckHook,
+  pnpmConfigHook,
 }:
 
 let
@@ -27,7 +28,7 @@ stdenv.mkDerivation rec {
     makeWrapper
     nodejs
     pnpm
-    pnpm.configHook
+    (pnpmConfigHook.override { inherit pnpm; })
   ];
 
   buildPhase = ''
