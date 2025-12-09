@@ -15,11 +15,15 @@
   pixman,
   pkg-config,
   pnpm_9,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   python3,
   vips,
   xcbuild,
 }:
-
+let
+  pnpm = pnpm_9;
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "sharkey";
   version = "2025.4.4";
@@ -33,8 +37,9 @@ stdenv.mkDerivation (finalAttrs: {
     fetchSubmodules = true;
   };
 
-  pnpmDeps = pnpm_9.fetchDeps {
+  pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
+    inherit pnpm;
     fetcherVersion = 2;
     hash = "sha256-34X8oJGkGXB9y7W4MquUkv8vY5yq2RoGIUCbjYppkIU=";
   };
@@ -43,7 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
     makeWrapper
     nodejs
     pkg-config
-    pnpm_9.configHook
+    (pnpmConfigHook.override { inherit pnpm; })
     python3
   ]
   ++ (lib.optionals stdenv.hostPlatform.isDarwin [

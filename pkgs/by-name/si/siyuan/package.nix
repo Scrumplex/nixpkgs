@@ -7,6 +7,8 @@
   pandoc,
   nodejs,
   pnpm_9,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   electron,
   makeWrapper,
   makeDesktopItem,
@@ -84,12 +86,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     nodejs
-    pnpm.configHook
+    (pnpmConfigHook.override { inherit pnpm; })
     makeWrapper
     copyDesktopItems
   ];
 
-  pnpmDeps = pnpm.fetchDeps {
+  pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs)
       pname
       version
@@ -97,6 +99,7 @@ stdenv.mkDerivation (finalAttrs: {
       sourceRoot
       postPatch
       ;
+    inherit pnpm;
     fetcherVersion = 1;
     hash = "sha256-bteZZ9sgYLLvOPSVbqm9E0Hb5x1UdWMu8DtpQHGjbPU=";
   };
