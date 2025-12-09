@@ -2,7 +2,8 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  pnpm,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   nodejs,
   makeBinaryWrapper,
   nix-update-script,
@@ -20,7 +21,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   pnpmWorkspaces = [ "svelte-check..." ];
 
-  pnpmDeps = pnpm.fetchDeps {
+  pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs)
       pname
       version
@@ -33,7 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     nodejs
-    pnpm.configHook
+    pnpmConfigHook
     makeBinaryWrapper
   ];
 

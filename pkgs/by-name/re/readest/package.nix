@@ -31,7 +31,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   };
 
   postUnpack = ''
-    # pnpm.configHook has to write to ../.., as our sourceRoot is set to apps/readest-app
+    # pnpmConfigHook has to write to ../.., as our sourceRoot is set to apps/readest-app
     chmod -R +w .
   '';
 
