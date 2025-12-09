@@ -5,6 +5,8 @@
   fetchFromGitHub,
   # Pinned, because our FODs are not guaranteed to be stable between major versions.
   pnpm_10,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   nodejs,
   python3,
   makeWrapper,
@@ -22,6 +24,7 @@ let
   epic-integration = callPackage ./epic-integration.nix { };
   comet-gog = comet-gog_heroic;
   electron = electron_37;
+  pnpm = pnpm_10;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "heroic-unwrapped";
@@ -34,15 +37,16 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-x792VA4PZleqUUgarh59JxJVXrvT95/rINYk8t9i3X0=";
   };
 
-  pnpmDeps = pnpm_10.fetchDeps {
+  pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
+    inherit pnpm;
     fetcherVersion = 1;
     hash = "sha256-F8H0eYltIJ0S8AX+2S3cR+v8dvePw09VWToVOLM8qII=";
   };
 
   nativeBuildInputs = [
     nodejs
-    pnpm_10.configHook
+    (pnpmConfigHook.override { inherit pnpm; })
     python3
     makeWrapper
   ];

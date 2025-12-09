@@ -3,9 +3,14 @@
   stdenv,
   nodejs,
   pnpm_8,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   fetchFromGitHub,
   npmHooks,
 }:
+let
+  pnpm = pnpm_8;
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "coc-cmake";
   version = "0-unstable-2024-10-21";
@@ -17,13 +22,14 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-VZRHpy0OTmoQyOEa0vIJl/VkV52r0HEtTzY1fjr6yQ0=";
   };
 
-  pnpmDeps = pnpm_8.fetchDeps {
+  pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs)
       pname
       version
       src
       pnpmWorkspaces
       ;
+    inherit pnpm;
     fetcherVersion = 2;
     hash = "sha256-wQ9dcqY7BVXc7wpsHlYNpc7utL1+MkdTCu77Wh8+QWc=";
   };
@@ -32,7 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     nodejs
-    pnpm_8.configHook
+    (pnpmConfigHook.override { inherit pnpm; })
   ];
 
   buildPhase = ''

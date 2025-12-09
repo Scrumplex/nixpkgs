@@ -4,13 +4,17 @@
   stdenv,
   nodejs,
   pnpm_10,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   prisma-engines,
   jq,
   makeWrapper,
   moreutils,
   callPackage,
 }:
-
+let
+  pnpm = pnpm_10;
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "prisma";
   version = "6.18.0";
@@ -24,14 +28,15 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     nodejs
-    pnpm_10.configHook
+    (pnpmConfigHook.override { inherit pnpm; })
     jq
     makeWrapper
     moreutils
   ];
 
-  pnpmDeps = pnpm_10.fetchDeps {
+  pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
+    inherit pnpm;
     fetcherVersion = 1;
     hash = "sha256-Et1UiZO2zyw9FHW0OuYK7AMfhIy5j7Q7GDQjaL6gjyg=";
   };

@@ -6,9 +6,14 @@
   nix-update-script,
   nodejs,
   pnpm_9,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   typescript,
   versionCheckHook,
 }:
+let
+  pnpm = pnpm_9;
+in
 buildGoModule (finalAttrs: {
   pname = "qui";
   version = "1.9.0";
@@ -25,19 +30,20 @@ buildGoModule (finalAttrs: {
 
     nativeBuildInputs = [
       nodejs
-      pnpm_9.configHook
+      (pnpmConfigHook.override { inherit pnpm; })
       typescript
     ];
 
     sourceRoot = "${finalAttrs.src.name}/web";
 
-    pnpmDeps = pnpm_9.fetchDeps {
+    pnpmDeps = fetchPnpmDeps {
       inherit (finalAttrs')
         pname
         version
         src
         sourceRoot
         ;
+      inherit pnpm;
       fetcherVersion = 2;
       hash = "sha256-bDaMax5RS+ot6vaJmNJm6p4gFaCD9aslJXI/58ua9DI=";
     };

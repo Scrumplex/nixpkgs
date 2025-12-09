@@ -3,8 +3,13 @@
   stdenvNoCC,
   nodejs,
   pnpm_9,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   fetchFromGitHub,
 }:
+let
+  pnpm = pnpm_9;
+in
 stdenvNoCC.mkDerivation rec {
   pname = "ocis-web";
   version = "8.0.5";
@@ -18,7 +23,7 @@ stdenvNoCC.mkDerivation rec {
 
   nativeBuildInputs = [
     nodejs
-    pnpm_9.configHook
+    (pnpmConfigHook.override { inherit pnpm; })
   ];
 
   buildPhase = ''
@@ -34,8 +39,13 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
-  pnpmDeps = pnpm_9.fetchDeps {
-    inherit pname version src;
+  pnpmDeps = fetchPnpmDeps {
+    inherit
+      pname
+      version
+      src
+      pnpm
+      ;
     fetcherVersion = 1;
     hash = "sha256-3Erva6srdkX1YQ727trx34Ufx524nz19MUyaDQToz6M=";
   };

@@ -3,11 +3,15 @@
   stdenv,
   nodejs,
   pnpm_10,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   fetchFromGitHub,
   gitMinimal,
   nix-update-script,
 }:
-
+let
+  pnpm = pnpm_10;
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "cspell";
   version = "9.4.0";
@@ -21,20 +25,21 @@ stdenv.mkDerivation (finalAttrs: {
 
   pnpmWorkspaces = [ "cspell..." ];
 
-  pnpmDeps = pnpm_10.fetchDeps {
+  pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs)
       pname
       version
       src
       pnpmWorkspaces
       ;
+    inherit pnpm;
     fetcherVersion = 2;
     hash = "sha256-GgcqgnrBoWu0paVSyTPfZIsGaPEH+EADBYoiZzlVrs8=";
   };
 
   nativeBuildInputs = [
     nodejs
-    pnpm_10.configHook
+    (pnpmConfigHook.override { inherit pnpm; })
   ];
 
   buildInputs = [

@@ -2,6 +2,8 @@
   lib,
   stdenv,
   pnpm_10,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   nodejs_22,
   fetchFromGitHub,
   nix-update-script,
@@ -10,6 +12,9 @@
   discord-canary,
   discord-development,
 }:
+let
+  pnpm = pnpm_10;
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "moonlight";
   version = "1.3.33";
@@ -23,11 +28,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     nodejs_22
-    pnpm_10.configHook
+    (pnpmConfigHook.override { inherit pnpm; })
   ];
 
-  pnpmDeps = pnpm_10.fetchDeps {
+  pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
+    inherit pnpm;
 
     buildInputs = [ nodejs_22 ];
 
