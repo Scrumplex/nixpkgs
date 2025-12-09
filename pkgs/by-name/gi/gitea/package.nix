@@ -11,7 +11,8 @@
   gzip,
   nodejs,
   openssh,
-  pnpm,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   stdenv,
   sqliteSupport ? true,
   nixosTests,
@@ -22,7 +23,7 @@ let
     pname = "gitea-frontend";
     inherit (gitea) src version;
 
-    pnpmDeps = pnpm.fetchDeps {
+    pnpmDeps = fetchPnpmDeps {
       inherit (finalAttrs) pname version src;
       fetcherVersion = 2;
       hash = "sha256-0p7P68BvO3hv0utUbnPpHSpGLlV7F9HHmOITvJAb/ww=";
@@ -30,7 +31,7 @@ let
 
     nativeBuildInputs = [
       nodejs
-      pnpm.configHook
+      pnpmConfigHook
     ];
 
     buildPhase = ''

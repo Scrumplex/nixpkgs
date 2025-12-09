@@ -29,10 +29,10 @@ buildNpmPackage {
 
   inherit src;
 
-  npmConfigHook = pnpm.configHook;
+  npmConfigHook = pnpmConfigHook;
 
   npmDeps = null;
-  pnpmDeps = pnpm.fetchDeps {
+  pnpmDeps = fetchPnpmDeps {
     inherit
       pname
       version

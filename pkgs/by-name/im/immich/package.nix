@@ -122,7 +122,7 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-K/E5bQraTlvNx1Cd0bKyY6ZhesafGccqVZ9Mu6Q0pZ0=";
   };
 
-  pnpmDeps = pnpm.fetchDeps {
+  pnpmDeps = fetchPnpmDeps {
     pname = "immich";
     inherit (finalAttrs) version src;
     fetcherVersion = 2;
@@ -240,7 +240,7 @@ stdenv.mkDerivation (finalAttrs: {
         extism-js
         nodejs
         pnpm
-        pnpm.configHook
+        pnpmConfigHook
       ];
 
       buildPhase = ''
@@ -269,7 +269,7 @@ stdenv.mkDerivation (finalAttrs: {
       nativeBuildInputs = [
         nodejs
         pnpm
-        pnpm.configHook
+        pnpmConfigHook
       ];
 
       buildPhase = ''
