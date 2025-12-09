@@ -3,7 +3,8 @@
   pkgs,
   stdenv,
   fetchFromGitHub,
-  pnpm,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   nodejs,
   vscode-utils,
   nix-update-script,
@@ -22,7 +23,7 @@ let
       hash = "sha256-9XEv50WIG1BJenY9MswES6d72Ead2VqW5dgBr7Eu8ek=";
     };
 
-    pnpmDeps = pnpm.fetchDeps {
+    pnpmDeps = fetchPnpmDeps {
       inherit (finalAttrs) pname version src;
       fetcherVersion = 2;
       hash = "sha256-QHITHoaz/lzZ3Th/YPlQayFMU9rtlnAZWEYkLyBuAkc=";
@@ -36,8 +37,7 @@ let
 
     nativeBuildInputs = [
       nodejs
-      pnpm.configHook
-      pnpm
+      pnpmConfigHook
     ];
 
     # Error: spawn /build/source/node_modules/.pnpm/sass-embedded-linux-x64@1.77.8/node_modules/sass-embedded-linux-x64/dart-sass/src/dart ENOENT
