@@ -10,12 +10,17 @@
   openssl,
   pkg-config,
   pnpm_9,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   protobuf,
   rustPlatform,
   stdenv,
   webkitgtk_4_1,
   wrapGAppsHook4,
 }:
+let
+  pnpm = pnpm_9;
+in
 rustPlatform.buildRustPackage rec {
   pname = "rquickshare";
   version = "0.11.5";
@@ -39,13 +44,14 @@ rustPlatform.buildRustPackage rec {
   '';
 
   pnpmRoot = "app/main";
-  pnpmDeps = pnpm_9.fetchDeps {
+  pnpmDeps = fetchPnpmDeps {
     inherit
       pname
       version
       src
       patches
       ;
+    inherit pnpm;
     postPatch = "cd ${pnpmRoot}";
     fetcherVersion = 1;
     hash = "sha256-VbdMaIEL1e+0U+ny4qbk1Mmkuc3cahKakKKYowCBK5Q=";
@@ -64,7 +70,7 @@ rustPlatform.buildRustPackage rec {
 
     # Setup pnpm
     nodejs
-    pnpm_9.configHook
+    (pnpmConfigHook.override { inherit pnpm; })
 
     protobuf
   ]

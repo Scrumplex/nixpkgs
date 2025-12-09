@@ -7,6 +7,8 @@
   jq,
   moreutils,
   pnpm_10,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   nodejs,
   cargo-tauri,
   pkg-config,
@@ -17,7 +19,9 @@
   openssl,
   webkitgtk_4_1,
 }:
-
+let
+  pnpm = pnpm_10;
+in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "gale";
   version = "1.10.0";
@@ -33,8 +37,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
     jq '.bundle.createUpdaterArtifacts = false' src-tauri/tauri.conf.json | sponge src-tauri/tauri.conf.json
   '';
 
-  pnpmDeps = pnpm_10.fetchDeps {
+  pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
+    inherit pnpm;
     fetcherVersion = 1;
     hash = "sha256-DYhPe59qfsSjyMIN31RL0mrHfmE6/I1SF+XutettkO8=";
   };
@@ -47,7 +52,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   nativeBuildInputs = [
     jq
     moreutils
-    pnpm_10.configHook
+    (pnpmConfigHook.override { inherit pnpm; })
     nodejs
     cargo-tauri.hook
     pkg-config

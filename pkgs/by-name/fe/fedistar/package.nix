@@ -5,6 +5,8 @@
   nix-update-script,
 
   pnpm_10,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   nodejs,
 
   rustPlatform,
@@ -35,8 +37,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoHash = "sha256-ZJgyrFDtzAH3XqDdnJ27Yn+WsTMrZR2+lnkZ6bw6hzg=";
 
-  pnpmDeps = pnpm.fetchDeps {
+  pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
+    inherit pnpm;
     fetcherVersion = 1;
     hash = "sha256-xXVsjAXmrsOp+mXrYAxSKz4vX5JApLZ+Rh6hrYlnJDI=";
   };
@@ -44,7 +47,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   nativeBuildInputs = [
     cargo-tauri.hook
 
-    pnpm.configHook
+    (pnpmConfigHook.override { inherit pnpm; })
     pnpm
     nodejs
 

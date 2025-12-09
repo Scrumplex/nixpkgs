@@ -7,6 +7,8 @@
   libredirect,
   nodejs,
   pnpm_9,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   restic,
   stdenv,
   util-linux,
@@ -23,6 +25,8 @@ let
     hash = "sha256-8WWs7XEVKAc/XmeL+dsw25azfLjUbHKp2MsB6Be14VE=";
   };
 
+  pnpm = pnpm_9;
+
   frontend = stdenv.mkDerivation (finalAttrs: {
     inherit version;
     pname = "${pname}-webui";
@@ -30,11 +34,12 @@ let
 
     nativeBuildInputs = [
       nodejs
-      pnpm_9.configHook
+      (pnpmConfigHook.override { inherit pnpm; })
     ];
 
-    pnpmDeps = pnpm_9.fetchDeps {
+    pnpmDeps = fetchPnpmDeps {
       inherit (finalAttrs) pname version src;
+      inherit pnpm;
       fetcherVersion = 1;
       hash = "sha256-vJgsU0OXyAKjUJsPOyIY8o3zfNW1BUZ5IL814wmJr3o=";
     };

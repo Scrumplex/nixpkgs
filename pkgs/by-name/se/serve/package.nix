@@ -5,8 +5,12 @@
   makeWrapper,
   nodejs,
   pnpm_9,
+  fetchPnpmDeps,
+  pnpmConfigHook,
 }:
-
+let
+  pnpm = pnpm_9;
+in
 buildNpmPackage (finalAttrs: {
   pname = "serve";
   version = "14.2.4";
@@ -19,13 +23,14 @@ buildNpmPackage (finalAttrs: {
   };
 
   npmDeps = null;
-  pnpmDeps = pnpm_9.fetchDeps {
+  pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
+    inherit pnpm;
     fetcherVersion = 2;
     hash = "sha256-IJMu0XHwEn2TZP/He79FFGl/PeXOCTD51lIgmImpyKo=";
   };
 
-  npmConfigHook = pnpm_9.configHook;
+  npmConfigHook = (pnpmConfigHook.override { inherit pnpm; });
 
   dontNpmBuild = true;
 

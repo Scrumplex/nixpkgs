@@ -8,6 +8,8 @@
   nodejs,
   pkg-config,
   pnpm_10,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   wails,
   webkitgtk_4_1,
   makeDesktopItem,
@@ -25,6 +27,8 @@ let
     hash = "sha256-kk6ZjG58gMIPd8f3Ib+1z7bie9X5kJvBq/CwioksbcU=";
   };
 
+  pnpm = pnpm_10;
+
   metaCommon = {
     homepage = "https://github.com/GUI-for-Cores/GUI.for.Clash";
     hydraPlatforms = [ ]; # https://gui-for-cores.github.io/guide/#note
@@ -39,16 +43,17 @@ let
 
     nativeBuildInputs = [
       nodejs
-      pnpm_10.configHook
+      (pnpmConfigHook.override { inherit pnpm; })
     ];
 
-    pnpmDeps = pnpm_10.fetchDeps {
+    pnpmDeps = fetchPnpmDeps {
       inherit (finalAttrs)
         pname
         version
         src
         sourceRoot
         ;
+      inherit pnpm;
       fetcherVersion = 2;
       hash = "sha256-MvGLIB68itkCGsBIgAI6ak5xa5rFAJfoAwNuISPRw30=";
     };

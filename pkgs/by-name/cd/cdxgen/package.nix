@@ -6,11 +6,15 @@
   node-gyp,
   nodejs,
   pnpm_10,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   python3,
   stdenv,
   xcbuild,
 }:
-
+let
+  pnpm = pnpm_10;
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "cdxgen";
   version = "11.10.0";
@@ -26,7 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
     makeWrapper
     nodejs
     node-gyp # required for sqlite3 bindings
-    pnpm_10.configHook
+    (pnpmConfigHook.override { inherit pnpm; })
     python3 # required for sqlite3 bindings
   ]
   ++ lib.optional stdenv.hostPlatform.isDarwin [
@@ -34,8 +38,9 @@ stdenv.mkDerivation (finalAttrs: {
     cctools.libtool
   ];
 
-  pnpmDeps = pnpm_10.fetchDeps {
+  pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
+    inherit pnpm;
     fetcherVersion = 2;
     hash = "sha256-o5pNgn+ZqaEfsWO97jXkRyPH+0pffR6TBZcF6nApWVg=";
   };

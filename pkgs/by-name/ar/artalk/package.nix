@@ -4,6 +4,8 @@
   fetchFromGitHub,
   nodejs,
   pnpm_9,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   installShellFiles,
   versionCheckHook,
   stdenv,
@@ -13,6 +15,8 @@
 let
   pname = "artalk";
   version = "2.9.1";
+
+  pnpm = pnpm_9;
 
   src = fetchFromGitHub {
     owner = "ArtalkJS";
@@ -28,11 +32,12 @@ let
 
     nativeBuildInputs = [
       nodejs
-      pnpm_9.configHook
+      (pnpmConfigHook.override { inherit pnpm; })
     ];
 
-    pnpmDeps = pnpm_9.fetchDeps {
+    pnpmDeps = fetchPnpmDeps {
       inherit (finalAttrs) pname version src;
+      inherit pnpm;
       fetcherVersion = 1;
       hash = "sha256-QIfadS2gNPtH006O86EndY/Hx2ml2FoKfUXJF5qoluw=";
     };

@@ -5,6 +5,8 @@
   makeWrapper,
   nodejs,
   pnpm_9,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   autoPatchelfHook,
   cacert,
   llvmPackages,
@@ -15,6 +17,9 @@
   nix-update-script,
   versionCheckHook,
 }:
+let
+  pnpm = pnpm_9;
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "wrangler";
   version = "4.53.0";
@@ -26,13 +31,14 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-YVIjmqPPgzf++eSwniR82QMun5/c1O+EerFqamZSyNY=";
   };
 
-  pnpmDeps = pnpm_9.fetchDeps {
+  pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs)
       pname
       version
       src
       postPatch
       ;
+    inherit pnpm;
     fetcherVersion = 2;
     hash = "sha256-ChOQXP9eW82f6Sxna3mZ5YJMlalPZGaBvsA1C6a5kds=";
   };
@@ -59,7 +65,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     makeWrapper
     nodejs
-    pnpm_9.configHook
+    (pnpmConfigHook.override { inherit pnpm; })
     jq
     moreutils
   ]
