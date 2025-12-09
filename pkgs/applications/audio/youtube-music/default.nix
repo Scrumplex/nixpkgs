@@ -7,11 +7,15 @@
   python3,
   copyDesktopItems,
   nodejs,
-  pnpm,
+  pnpm_10,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   makeDesktopItem,
   nix-update-script,
 }:
-
+let
+  pnpm = pnpm_10;
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "youtube-music";
   version = "3.11.0";
@@ -28,8 +32,9 @@ stdenv.mkDerivation (finalAttrs: {
     ./fix-mpris-desktop-entry.patch
   ];
 
-  pnpmDeps = pnpm.fetchDeps {
+  pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
+    inherit pnpm;
     fetcherVersion = 2;
     hash = "sha256-xZQ8rnLGD0ZxxUUPLHmNJ6mA+lnUHCTBvtJTiIPxaZU=";
   };
@@ -38,7 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
     makeWrapper
     python3
     nodejs
-    pnpm.configHook
+    (pnpmConfigHook.override { inherit pnpm; })
   ]
   ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ copyDesktopItems ];
 
