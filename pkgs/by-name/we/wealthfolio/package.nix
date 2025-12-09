@@ -10,12 +10,16 @@
   openssl,
   pkg-config,
   pnpm_9,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   rustPlatform,
   webkitgtk_4_1,
   wrapGAppsHook3,
   nix-update-script,
 }:
-
+let
+  pnpm = pnpm_9;
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "wealthfolio";
   version = "1.2.3";
@@ -27,8 +31,9 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-bp8BxJp/Ga9Frqyvl76Fh9AfSEKv3W+P1ND9zqeMXhg=";
   };
 
-  pnpmDeps = pnpm_9.fetchDeps {
+  pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) src pname version;
+    inherit pnpm;
     fetcherVersion = 1;
     hash = "sha256-imExQiPl6sjYD//p788dGYEn+DRs9H8l9sGmCdl5Cic=";
   };
@@ -52,7 +57,7 @@ stdenv.mkDerivation (finalAttrs: {
     moreutils
     nodejs
     pkg-config
-    pnpm_9.configHook
+    (pnpmConfigHook.override { inherit pnpm; })
     rustPlatform.cargoSetupHook
     wrapGAppsHook3
   ];

@@ -3,6 +3,8 @@
   buildGoModule,
   fetchFromGitHub,
   pnpm_9,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   nodejs,
   go_1_24,
   git,
@@ -18,6 +20,8 @@ let
     tag = "v${version}";
     hash = "sha256-JA0LawQHWLCJQno1GsajVSsLG3GGgDp2ttIa2xELX48=";
   };
+
+  pnpm = pnpm_9;
 in
 buildGoModule {
   inherit pname version src;
@@ -35,8 +39,8 @@ buildGoModule {
     preBuild = "";
   };
 
-  pnpmDeps = pnpm_9.fetchDeps {
-    inherit pname version;
+  pnpmDeps = fetchPnpmDeps {
+    inherit pname version pnpm;
     src = "${src}/frontend";
     fetcherVersion = 1;
     hash = "sha256-gHx4HydL33i1SqzG1PChnlWdlO5NFa5F/R5Yq3mS4ng=";
@@ -58,7 +62,7 @@ buildGoModule {
 
   nativeBuildInputs = [
     pnpm_9
-    pnpm_9.configHook
+    (pnpmConfigHook.override { inherit pnpm; })
     nodejs
   ];
 

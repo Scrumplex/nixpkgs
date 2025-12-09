@@ -8,6 +8,8 @@
   openssl,
   pkg-config,
   pnpm_9,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   rustPlatform,
   webkitgtk_4_1,
   wrapGAppsHook4,
@@ -28,12 +30,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   inherit (cargo-tauri) cargoDeps;
 
-  pnpmDeps = pnpm.fetchDeps {
+  pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs)
       pname
       version
       src
       ;
+    inherit pnpm;
 
     fetcherVersion = 1;
     hash = "sha256-gHniZv847JFrmKnTUZcgyWhFl/ovJ5IfKbbM5I21tZc=";
@@ -44,7 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     nodejs
     pkg-config
-    pnpm.configHook
+    (pnpmConfigHook.override { inherit pnpm; })
     rustPlatform.cargoCheckHook
     rustPlatform.cargoSetupHook
     wrapGAppsHook4

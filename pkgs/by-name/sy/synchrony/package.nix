@@ -4,11 +4,15 @@
   fetchFromGitHub,
   nodejs,
   pnpm_9,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   nix-update-script,
   fetchurl,
   runCommand,
 }:
-
+let
+  pnpm = pnpm_9;
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "synchrony";
   version = "2.4.5";
@@ -22,11 +26,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     nodejs
-    pnpm_9.configHook
+    (pnpmConfigHook.override { inherit pnpm; })
   ];
 
-  pnpmDeps = pnpm_9.fetchDeps {
+  pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
+    inherit pnpm;
     fetcherVersion = 1;
     hash = "sha256-+hS4UK7sncCxv6o5Yl72AeY+LSGLnUTnKosAYB6QsP0=";
   };

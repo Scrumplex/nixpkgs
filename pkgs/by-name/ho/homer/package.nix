@@ -3,12 +3,16 @@
   stdenvNoCC,
   fetchFromGitHub,
   pnpm_10,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   nodejs,
   dart-sass,
   nix-update-script,
   nixosTests,
 }:
-
+let
+  pnpm = pnpm_10;
+in
 stdenvNoCC.mkDerivation rec {
   pname = "homer";
   version = "25.11.1";
@@ -19,12 +23,12 @@ stdenvNoCC.mkDerivation rec {
     hash = "sha256-6shFVaCtPQeZCeeswAQHgcXOwVwABNa3ljsdUG63QGo=";
   };
 
-  pnpmDeps = pnpm_10.fetchDeps {
+  pnpmDeps = fetchPnpmDeps {
     inherit
       pname
       version
       src
-
+      pnpm
       ;
     fetcherVersion = 2;
     hash = "sha256-TtazfRhcniA1H//C95AMH8/Pw+Rbtinlfg7dDAmSk1w=";
@@ -33,7 +37,7 @@ stdenvNoCC.mkDerivation rec {
   nativeBuildInputs = [
     nodejs
     dart-sass
-    pnpm_10.configHook
+    (pnpmConfigHook.override { inherit pnpm; })
   ];
 
   buildPhase = ''

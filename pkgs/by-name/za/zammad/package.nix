@@ -13,6 +13,8 @@
   moreutils,
   nodejs,
   pnpm_9,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   cacert,
   valkey,
   dataDir ? "/var/lib/zammad",
@@ -21,6 +23,8 @@
 let
   pname = "zammad";
   version = "6.5.2";
+
+  pnpm = pnpm_9;
 
   src = applyPatches {
     src = fetchFromGitHub (lib.importJSON ./source.json);
@@ -70,7 +74,7 @@ stdenvNoCC.mkDerivation {
   nativeBuildInputs = [
     valkey
     postgresql
-    pnpm_9.configHook
+    (pnpmConfigHook.override { inherit pnpm; })
     nodejs
     procps
     cacert
@@ -78,8 +82,8 @@ stdenvNoCC.mkDerivation {
 
   env.RAILS_ENV = "production";
 
-  pnpmDeps = pnpm_9.fetchDeps {
-    inherit pname src;
+  pnpmDeps = fetchPnpmDeps {
+    inherit pname src pnpm;
 
     fetcherVersion = 1;
     hash = "sha256-mfdzb/LXQYL8kaQpWi9wD3OOroOOonDlJrhy9Dwl1no";

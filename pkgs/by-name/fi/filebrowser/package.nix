@@ -4,6 +4,8 @@
   buildGoModule,
   buildNpmPackage,
   pnpm_9,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   nix-update-script,
   nixosTests,
 }:
@@ -25,16 +27,17 @@ let
 
     sourceRoot = "${src.name}/frontend";
 
-    npmConfigHook = pnpm.configHook;
+    npmConfigHook = pnpmConfigHook.override { inherit pnpm; };
     npmDeps = pnpmDeps;
 
-    pnpmDeps = pnpm.fetchDeps {
+    pnpmDeps = fetchPnpmDeps {
       inherit
         pname
         version
         src
         sourceRoot
         ;
+      inherit pnpm;
       fetcherVersion = 2;
       hash = "sha256-3n44BGJLdQR6uBSF09oyUzJm35/S3/ZEyZh4Wxqlfiw=";
     };

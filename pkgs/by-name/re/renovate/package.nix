@@ -5,6 +5,8 @@
   makeWrapper,
   nodejs,
   pnpm_10,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   python3,
   testers,
   xcbuild,
@@ -12,7 +14,9 @@
   nix-update-script,
   yq-go,
 }:
-
+let
+  pnpm = pnpm_10;
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "renovate";
   version = "42.24.0";
@@ -32,14 +36,15 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     makeWrapper
     nodejs
-    pnpm_10.configHook
+    (pnpmConfigHook.override { inherit pnpm; })
     python3
     yq-go
   ]
   ++ lib.optional stdenv.hostPlatform.isDarwin xcbuild;
 
-  pnpmDeps = pnpm_10.fetchDeps {
+  pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
+    inherit pnpm;
     fetcherVersion = 2;
     hash = "sha256-cUpMiCM6fv8n/tMQJ8UHNaP48MNdc7VD+Q+ka+CQ3EE=";
   };

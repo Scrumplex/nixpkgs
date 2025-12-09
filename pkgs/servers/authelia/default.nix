@@ -2,13 +2,21 @@
   lib,
   stdenv,
   nodejs,
-  pnpm,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   fetchFromGitHub,
   buildGoModule,
   installShellFiles,
   callPackage,
   nixosTests,
-  authelia-web ? callPackage ./web.nix { inherit nodejs pnpm fetchFromGitHub; },
+  authelia-web ? callPackage ./web.nix {
+    inherit
+      nodejs
+      fetchPnpmDeps
+      pnpmConfigHook
+      fetchFromGitHub
+      ;
+  },
 }:
 
 let

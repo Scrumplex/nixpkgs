@@ -5,6 +5,8 @@
   buildGoModule,
   nodejs,
   pnpm_9,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   nix-update-script,
 }:
 let
@@ -27,11 +29,12 @@ buildGoModule (finalAttrs: {
 
     nativeBuildInputs = [
       nodejs
-      pnpm.configHook
+      (pnpmConfigHook.override { inherit pnpm; })
     ];
 
-    pnpmDeps = pnpm.fetchDeps {
+    pnpmDeps = fetchPnpmDeps {
       inherit (finalAttrs') pname version src;
+      inherit pnpm;
       fetcherVersion = 2;
       hash = "sha256-8eQhR/fuDFNL8W529Ev7piCaseVaFahgZJQk3AJA3ng=";
     };

@@ -4,6 +4,8 @@
   lib,
   nodejs,
   pnpm_10,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   stdenv,
   nix-update-script,
   discord,
@@ -12,6 +14,9 @@
   discord-development,
   buildWebExtension ? false,
 }:
+let
+  pnpm = pnpm_10;
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "equicord";
   # Upstream discourages inferring the package version from the package.json found in
@@ -27,8 +32,9 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-12P62UAt9eiQoGCXQGYQx0cPmankniltGqPTsys9Ves=";
   };
 
-  pnpmDeps = pnpm_10.fetchDeps {
+  pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
+    inherit pnpm;
     fetcherVersion = 1;
     hash = "sha256-gl/4+AN3+YOl3uCYholPU8jo0IayazlY987fwhtHCuk=";
   };
@@ -36,7 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     git
     nodejs
-    pnpm_10.configHook
+    (pnpmConfigHook.override { inherit pnpm; })
   ];
 
   env = {

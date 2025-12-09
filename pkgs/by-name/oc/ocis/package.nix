@@ -6,10 +6,13 @@
   callPackage,
   gnumake,
   pnpm_9,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   nodejs,
   ocis,
 }:
 let
+  pnpm = pnpm_9;
   idp-assets = stdenvNoCC.mkDerivation {
     pname = "idp-assets";
     version = "0-unstable-2020-10-14";
@@ -44,11 +47,16 @@ buildGoModule rec {
   nativeBuildInputs = [
     gnumake
     nodejs
-    pnpm_9.configHook
+    (pnpmConfigHook.override { inherit pnpm; })
   ];
 
-  pnpmDeps = pnpm_9.fetchDeps {
-    inherit pname version src;
+  pnpmDeps = fetchPnpmDeps {
+    inherit
+      pname
+      version
+      src
+      pnpm
+      ;
     sourceRoot = "${src.name}/services/idp";
     fetcherVersion = 1;
     hash = "sha256-gNlN+u/bobnTsXrsOmkDcWs67D/trH3inT5AVQs3Brs=";

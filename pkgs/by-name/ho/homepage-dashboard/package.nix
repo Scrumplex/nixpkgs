@@ -4,6 +4,8 @@
   makeBinaryWrapper,
   nodejs,
   pnpm_10,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   python3,
   stdenv,
   unixtools,
@@ -26,6 +28,8 @@ let
     cp -r --no-preserve=mode ${dashboardIcons}/svg/. $out/share/homepage/public/icons
     cp ${dashboardIcons}/LICENSE $out/share/homepage/public/icons/
   '';
+
+  pnpm = pnpm_10;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "homepage-dashboard";
@@ -38,12 +42,13 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-03am9z381UozNsmWZefopMp8/tLycXJyiZ5BUGaV1kY=";
   };
 
-  pnpmDeps = pnpm_10.fetchDeps {
+  pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs)
       pname
       version
       src
       ;
+    inherit pnpm;
     fetcherVersion = 1;
     hash = "sha256-svkqmRFwZpcExFWtAbLL0lpHhzsI2s7RiLfQajIqjck=";
   };
@@ -51,7 +56,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     makeBinaryWrapper
     nodejs
-    pnpm_10.configHook
+    (pnpmConfigHook.override { inherit pnpm; })
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [ cctools ];
 

@@ -9,12 +9,15 @@
   removeReferencesTo,
   nodejs_20,
   pnpm_9,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   python3,
   gitMinimal,
   jq,
   zip,
 }:
 let
+  pnpm = pnpm_9;
   nodeSources = srcOnly nodejs_20;
   esbuild' = esbuild.override {
     buildGoModule =
@@ -48,14 +51,15 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     customPython
     nodejs_20
-    pnpm_9.configHook
+    (pnpmConfigHook.override { inherit pnpm; })
     gitMinimal
     jq
     zip
   ];
 
-  pnpmDeps = pnpm_9.fetchDeps {
+  pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
+    inherit pnpm;
     fetcherVersion = 1;
     hash = "sha256-pLe5smsXdzSBgz/OYNO5FVEI2L6y/p+jMxEkzqUaX34=";
   };
