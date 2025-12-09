@@ -39,7 +39,7 @@ buildGoModule rec {
   ];
 
   # Generate templ templates during vendor hash calculation
-  # Don't run pnpm in this phase - filter out pnpm.configHook
+  # Don't run pnpm in this phase - filter out pnpmConfigHook
   overrideModAttrs = oldAttrs: {
     nativeBuildInputs = builtins.filter (drv: drv != pnpm_9.configHook) (
       oldAttrs.nativeBuildInputs or [ ]

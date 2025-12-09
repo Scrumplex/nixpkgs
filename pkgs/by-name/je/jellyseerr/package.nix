@@ -27,7 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-a3lhQ33Zb+vSu1sQjuqO3bITiQEIOVyFTecmJAhJROU=";
   };
 
-  pnpmDeps = pnpm.fetchDeps {
+  pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
     fetcherVersion = 1;
     hash = "sha256-3df72m/ARgfelBLE6Bhi8+ThHytowVOBL2Ndk7auDgg=";
@@ -40,7 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
     python3Packages.distutils
     nodejs
     makeWrapper
-    pnpm.configHook
+    pnpmConfigHook
   ];
 
   preBuild = ''

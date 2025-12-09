@@ -28,7 +28,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   inherit (cargo-tauri) cargoDeps;
 
-  pnpmDeps = pnpm.fetchDeps {
+  pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs)
       pname
       version
@@ -44,7 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     nodejs
     pkg-config
-    pnpm.configHook
+    pnpmConfigHook
     rustPlatform.cargoCheckHook
     rustPlatform.cargoSetupHook
     wrapGAppsHook4

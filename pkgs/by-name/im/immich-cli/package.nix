@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     makeWrapper
     nodejs
     pnpm
-    pnpm.configHook
+    pnpmConfigHook
   ];
 
   buildPhase = ''

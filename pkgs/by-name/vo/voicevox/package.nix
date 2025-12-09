@@ -46,7 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
     jq "del(.packageManager) | .version = \"$version\"" package.json | sponge package.json
   '';
 
-  pnpmDeps = pnpm.fetchDeps {
+  pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs)
       pname
       version
@@ -72,7 +72,7 @@ stdenv.mkDerivation (finalAttrs: {
     makeWrapper
     moreutils
     nodejs
-    pnpm.configHook
+    pnpmConfigHook
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     copyDesktopItems
