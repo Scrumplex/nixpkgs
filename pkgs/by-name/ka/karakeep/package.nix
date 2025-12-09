@@ -38,9 +38,9 @@ stdenv.mkDerivation (finalAttrs: {
     python3
     nodejs
     node-gyp
-    pnpm.configHook
+    pnpmConfigHook
   ];
-  pnpmDeps = pnpm.fetchDeps {
+  pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version;
 
     # We need to pass the patched source code, so pnpm sees the patched version

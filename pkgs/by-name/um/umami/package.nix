@@ -77,7 +77,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     makeWrapper
     nodejs
-    pnpm.configHook
+    pnpmConfigHook
   ];
 
   src = fetchFromGitHub {
@@ -90,7 +90,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   # install dev dependencies as well, for rollup
   pnpmInstallFlags = [ "--prod=false" ];
 
-  pnpmDeps = pnpm.fetchDeps {
+  pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs)
       pname
       pnpmInstallFlags
