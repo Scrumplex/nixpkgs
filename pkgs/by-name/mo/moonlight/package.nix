@@ -13,7 +13,7 @@
   discord-development,
 }:
 let
-  pnpm = pnpm_10;
+  pnpm = pnpm_10.override { nodejs = nodejs_22; };
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "moonlight";
@@ -34,8 +34,6 @@ stdenv.mkDerivation (finalAttrs: {
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
     inherit pnpm;
-
-    buildInputs = [ nodejs_22 ];
 
     fetcherVersion = 2;
     hash = "sha256-PRlgwyePFpFdQRcojGDEC4ESZEGTJf1Ad9EFgm8hmKY=";

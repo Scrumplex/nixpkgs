@@ -17,7 +17,7 @@
   zip,
 }:
 let
-  pnpm = pnpm_9;
+  pnpm = pnpm_9.override { nodejs = nodejs_20; };
   nodeSources = srcOnly nodejs_20;
   esbuild' = esbuild.override {
     buildGoModule =
