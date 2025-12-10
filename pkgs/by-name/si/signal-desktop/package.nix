@@ -101,7 +101,7 @@ stdenv.mkDerivation (finalAttrs: {
   strictDeps = true;
   nativeBuildInputs = [
     nodejs
-    (pnpmConfigHook { inherit pnpm; })
+    (pnpmConfigHook.override { inherit pnpm; })
     makeWrapper
     copyDesktopItems
     python3
