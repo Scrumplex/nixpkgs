@@ -33,7 +33,7 @@
 }:
 
 let
-  pnpm = pnpm_10;
+  pnpm = pnpm_10.override { nodejs = nodejs_20; };
 
   eSearch-OCR-ch = fetchzip {
     url = "https://github.com/xushengfeng/eSearch-OCR/releases/download/4.0.0/ch.zip";
@@ -68,9 +68,7 @@ stdenv.mkDerivation (finalAttrs: {
     inherit (finalAttrs) pname version src;
     inherit pnpm;
     fetcherVersion = 2;
-    prePnpmInstall = ''
-      export PATH=$PATH:${gitMinimal}/bin
-    '';
+    nativeBuildInputs = [ gitMinimal ];
     hash = "sha256-wPwsFY7wvbE1LW5PMwMZKejELtqmdsYO2RVrEuOzdcg=";
   };
 

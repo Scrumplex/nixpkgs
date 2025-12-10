@@ -2,7 +2,6 @@
   lib,
   stdenvNoCC,
   fetchFromGitHub,
-  pnpm,
   fetchPnpmDeps,
   pnpmConfigHook,
   nodejs,
@@ -32,7 +31,6 @@ let
     nativeBuildInputs = [
       nodejs
       pnpmConfigHook
-      pnpm
     ];
 
     buildPhase = ''

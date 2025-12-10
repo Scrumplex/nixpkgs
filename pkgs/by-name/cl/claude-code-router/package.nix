@@ -12,7 +12,7 @@
 }:
 let
   buildNpmPackage' = buildNpmPackage.override { nodejs = nodejs_24; };
-  pnpm = pnpm_9;
+  pnpm = pnpm_9.override { nodejs = nodejs_24; };
 in
 buildNpmPackage' (finalAttrs: {
   pname = "claude-code-router";

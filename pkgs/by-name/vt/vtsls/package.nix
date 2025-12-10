@@ -11,7 +11,7 @@
   nix-update-script,
 }:
 let
-  pnpm = pnpm_8;
+  pnpm = pnpm_8.override { nodejs = nodejs_22; };
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "vtsls";

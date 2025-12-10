@@ -17,7 +17,7 @@
 let
   # NodeJS 22.18.0 broke our build, not sure why
   wails' = wails.override { nodejs = nodejs_20; };
-  pnpm = pnpm_8;
+  pnpm = pnpm_8.override { nodejs = nodejs_20; };
 in
 buildGoModule rec {
   pname = "satisfactorymodmanager";

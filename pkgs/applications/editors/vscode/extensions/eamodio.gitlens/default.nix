@@ -3,7 +3,6 @@
   pkgs,
   stdenv,
   fetchFromGitHub,
-  pnpm,
   fetchPnpmDeps,
   pnpmConfigHook,
   nodejs,
@@ -39,7 +38,6 @@ let
     nativeBuildInputs = [
       nodejs
       pnpmConfigHook
-      pnpm
     ];
 
     # Error: spawn /build/source/node_modules/.pnpm/sass-embedded-linux-x64@1.77.8/node_modules/sass-embedded-linux-x64/dart-sass/src/dart ENOENT

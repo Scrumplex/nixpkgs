@@ -38,14 +38,17 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail '"@types/react": "18.3.1"' '"@types/react": "19.0.12"'
   '';
 
-  pnpmDeps =
-    (fetchPnpmDeps {
-      inherit (finalAttrs) pname src;
-      inherit pnpm;
-      fetcherVersion = 2;
-      hash = "sha256-5MjxEs+jbowJJbJ9+Z+vppFImpB+PZzEhntwRAgv+xM=";
-    }).overrideAttrs
-      { inherit (finalAttrs) patches postPatch; };
+  pnpmDeps = fetchPnpmDeps {
+    inherit (finalAttrs)
+      pname
+      src
+      patches
+      postPatch
+      ;
+    inherit pnpm;
+    fetcherVersion = 2;
+    hash = "sha256-5MjxEs+jbowJJbJ9+Z+vppFImpB+PZzEhntwRAgv+xM=";
+  };
 
   nativeBuildInputs = [
     git

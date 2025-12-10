@@ -37,7 +37,7 @@ let
       mainProgram = "izzy";
     };
   };
-  pnpm = pnpm_9;
+  pnpm = pnpm_9.override { nodejs = nodejs_22; };
   nodejs = nodejs_22;
 in
 stdenvNoCC.mkDerivation (finalAttrs: {
