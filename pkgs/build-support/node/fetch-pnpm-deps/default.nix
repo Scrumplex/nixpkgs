@@ -69,7 +69,7 @@ in
             cacert
             jq
             moreutils
-            args.pnpm
+            pnpm # from args
             yq
           ];
 
@@ -149,7 +149,7 @@ in
           passthru = {
             inherit fetcherVersion;
             serve = callPackage ./serve.nix {
-              pnpm = args.pnpm;
+              inherit pnpm; # from args
               pnpmDeps = finalAttrs.finalPackage;
             };
           };
