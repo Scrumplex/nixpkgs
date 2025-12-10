@@ -2,6 +2,7 @@
   stdenv,
   lib,
   fetchFromGitHub,
+  pnpm,
   fetchPnpmDeps,
   pnpmConfigHook,
   nodejs,
@@ -23,6 +24,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
+    inherit pnpm;
     fetcherVersion = 1;
     hash = "sha256-regaYG+SDvIgdnHQVR1GG1A1FSBXpzFfLuyTEdMt1kQ=";
   };
@@ -37,7 +39,7 @@ stdenv.mkDerivation (finalAttrs: {
   strictDeps = true;
   nativeBuildInputs = [
     nodejs
-    pnpmConfigHook
+    (pnpmConfigHook.override { inherit pnpm; })
     rustPlatform.cargoSetupHook
     cargo
     dump_syms
