@@ -48,7 +48,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     cargo-tauri.hook
 
     (pnpmConfigHook.override { inherit pnpm; })
-    pnpm
     nodejs
 
     pkg-config

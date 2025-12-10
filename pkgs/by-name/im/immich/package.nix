@@ -141,7 +141,6 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     nodejs
     pkg-config
-    pnpm
     (pnpmConfigHook.override { inherit pnpm; })
     python3
     makeWrapper
