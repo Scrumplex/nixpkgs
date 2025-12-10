@@ -9,7 +9,7 @@
   versionCheckHook,
 }:
 let
-  pnpm = pnpm_9;
+  pnpm = pnpm_9.override { nodejs = nodejs_22; };
 in
 stdenv.mkDerivation rec {
   pname = "tsx";

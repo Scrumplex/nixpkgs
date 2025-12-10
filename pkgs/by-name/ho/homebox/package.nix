@@ -61,7 +61,6 @@ buildGoModule {
   '';
 
   nativeBuildInputs = [
-    pnpm_9
     (pnpmConfigHook.override { inherit pnpm; })
     nodejs
   ];

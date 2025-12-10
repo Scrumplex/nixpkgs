@@ -17,6 +17,7 @@
   qpdf,
   tesseract5,
   unpaper,
+  pnpm_10,
   fetchPnpmDeps,
   pnpmConfigHook,
   poppler-utils,
@@ -37,6 +38,8 @@ let
     tag = "v${version}";
     hash = "sha256-uf6/cl41lp2zEp3+gTbTYQlJcM3bdLTtOo+vEUrGIco=";
   };
+
+  pnpm = pnpm_10.override { nodejs = nodejs_20; };
 
   python = python3.override {
     self = python;
@@ -80,6 +83,7 @@ let
 
     pnpmDeps = fetchPnpmDeps {
       inherit (finalAttrs) pname version src;
+      inherit pnpm;
       fetcherVersion = 2;
       hash = "sha256-JqFkA8t5D0SmhlKwhiKIztzWGXf+vO0Ro1ABVGXVzS8=";
     };
@@ -88,7 +92,7 @@ let
       node-gyp
       nodejs_20
       pkg-config
-      pnpmConfigHook
+      (pnpmConfigHook.override { inherit pnpm; })
       python3
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
